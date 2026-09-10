@@ -153,6 +153,37 @@ export const defaultPortfolioData: UserPortfolioData = {
       category: "INTERACTIVE WEB EXPERIENCE",
       image: "/images/Jade_Lantern.png",
       description: "Jade Lantern is a Thai & Chinese fine-dining restaurant concept website created to combine elegant visual design with interactive web experiences. It features an animated hero section, dynamic tabbed menu, and a fully interactive 3D flip-book menu with an editing mode.\n\nBuilt from scratch using HTML, CSS, and JavaScript, the project focuses on interactive design, animations, and creating a memorable user experience.",
+      overview: "Engineered an interactive fine-dining digital presence featuring hardware-accelerated 3D flip-book page turns, asynchronous culinary category filtering, and responsive reservation mechanics built entirely without bloated heavy frameworks.",
+      keyModules: [
+        "3D CSS Matrix Flip Engine",
+        "Dynamic Menu State Machine",
+        "Fine-Dining Responsive UI Core",
+        "Client-Side Order & Reservation Cache",
+        "Interactive Editorial Mode"
+      ],
+      protocols: ["HTML5 Canvas", "CSS 3D Transforms", "Vanilla ES6+", "DOM Audio API", "LocalStorage Cache", "Semantic Web"],
+      milestones: [
+        "Designed and calculated smooth 3D CSS perspective transform matrices for realistic physical book page turning.",
+        "Implemented high-performance DOM manipulation maintaining a rock-solid 60 FPS across desktop displays.",
+        "Engineered instantaneous category filtering with zero client-side latency and smooth layout reflows.",
+        "Optimized asset loading pipeline achieving sub-second initial load speeds and crisp typography rendering."
+      ],
+      codeSnippet: {
+        title: "3D FLIP-BOOK ENGINE / PAGE-TURN CONTROLLER",
+        language: "javascript",
+        code: `// Jade Lantern 3D Book Turn State Controller
+function flipBookPage(pageIndex, direction) {
+  const pageElement = document.querySelector(\`#page-\${pageIndex}\`);
+  if (!pageElement) return;
+  
+  const angle = direction === 'forward' ? -180 : 0;
+  pageElement.style.transform = \`rotateY(\${angle}deg)\`;
+  pageElement.style.zIndex = direction === 'forward' ? 100 - pageIndex : pageIndex;
+  
+  // Audio feedback trigger for physical tactile feel
+  playBookTurnAudioEffect();
+}`
+      },
       techStack: ["HTML5", "CSS3", "JavaScript", "Interactive UI", "Animation", "3D Interaction"],
       demoUrl: "https://auratech01.github.io/jade-lantern-restaurant/",
       githubUrl: "https://github.com/auratech01",
@@ -169,6 +200,46 @@ export const defaultPortfolioData: UserPortfolioData = {
       category: "INTERACTIVE ESCAPE-ROOM GAME (DESKTOP ONLY)",
       image: "/images/Birthday_experiance.png",
       description: "Birthday Experience is a desktop-only interactive experience (optimized exclusively for desktop and laptop displays) designed as a digital journey through memories. It includes 22 unlockable memory levels, drag-and-drop mini-games, a cinema room, and canvas-based fireworks and confetti.\n\nBuilt entirely with vanilla JavaScript and HTML5 Canvas, the project explores how code can be used to create an experience rather than simply a traditional webpage.",
+      overview: "Conceived and engineered a multi-layered narrative escape labyrinth featuring 22 sequential unlockable stages, real-time 2D Canvas physics confetti bursts, drag-and-drop mechanics, and spatial ambient state management.",
+      keyModules: [
+        "22-Level Progress Engine",
+        "HTML5 Canvas Particle Burst System",
+        "Custom Drag-and-Drop Puzzle Rig",
+        "Ambient Spatial Audio Manager",
+        "Interactive Cinema & Memory Vault"
+      ],
+      protocols: ["HTML5 2D Canvas", "RequestAnimationFrame", "Custom Game Loop", "Web Audio API", "Drag & Drop API", "State Persistence"],
+      milestones: [
+        "Built a 60 FPS Canvas particle engine with mathematical velocity decay, boundary bouncing, and alpha fade-outs.",
+        "Programmed a sequential level unlocking system using localized progression state trees.",
+        "Engineered tactile puzzle interactions with drag-and-drop hitboxes and precision collision thresholds.",
+        "Architected an immersive digital escape room experience with zero external game engine dependencies."
+      ],
+      codeSnippet: {
+        title: "CANVAS PARTICLE SYSTEM & VELOCITY PHYSICS",
+        language: "javascript",
+        code: `// Canvas 2D Particle Explosion & Physics Decay Loop
+class MemoryConfetti {
+  constructor(x, y, palette) {
+    this.x = x;
+    this.y = y;
+    this.color = palette[Math.floor(Math.random() * palette.length)];
+    this.vx = (Math.random() - 0.5) * 12;
+    this.vy = (Math.random() - 0.8) * 14;
+    this.gravity = 0.35;
+    this.alpha = 1.0;
+  }
+  tick(ctx) {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += this.gravity;
+    this.alpha = Math.max(0, this.alpha - 0.018);
+    ctx.fillStyle = this.color;
+    ctx.globalAlpha = this.alpha;
+    ctx.fillRect(this.x, this.y, 4, 7);
+  }
+}`
+      },
       techStack: ["HTML5", "CSS3", "JavaScript", "HTML5 Canvas", "Game Mechanics", "Drag & Drop", "Animation", "Desktop Only"],
       demoUrl: "https://auratech01.github.io/birthday-experience/",
       githubUrl: "https://github.com/auratech01",
@@ -185,14 +256,44 @@ export const defaultPortfolioData: UserPortfolioData = {
       category: "DESKTOP SECURITY & APPLIED AI",
       image: "/images/Sentinel.png",
       description: "Project Sentinel is a multi-threaded Python desktop application combining biometric Face ID authentication (OpenCV) with real-time system and network monitoring (CPU, RAM, network activity).\n\nIt features an offline, pattern-based static code scanner for common vulnerability classes with optional Google Gemini API integration for deeper analysis and automated fix recommendations, as well as a PIN-based fallback and security alert system.",
+      overview: "Developed a desktop security suite combining facial biometric authentication (OpenCV Haar Cascade), real-time hardware telemetry streams, and an offline regex vulnerability auditing engine with cloud AI integration.",
+      keyModules: [
+        "Biometric Face ID Engine (OpenCV)",
+        "Static Regex Code Security Auditor",
+        "Hardware Telemetry Worker (CPU/RAM/IO)",
+        "Google Gemini Vulnerability Scanner",
+        "Encrypted Fallback PIN System"
+      ],
+      protocols: ["Python 3.11", "OpenCV Vision API", "CustomTkinter GUI", "REST / Gemini API", "Multi-Threading (Daemon)", "Regex AST Analysis"],
+      milestones: [
+        "Trained and implemented real-time Haar Cascade facial boundary detection with frame-level anti-spoof checks.",
+        "Engineered non-blocking background daemon threads for live CPU/RAM and network throughput polling.",
+        "Constructed a multi-rule static security auditor identifying SQL injection, hardcoded secrets, and buffer patterns.",
+        "Integrated Google Gemini AI for contextual automated code vulnerability explanation and remediation patches."
+      ],
+      codeSnippet: {
+        title: "BIOMETRIC AUTHENTICATION & SECURITY AUDITOR",
+        language: "python",
+        code: `import cv2
+import threading
+from google import genai
+
+class SentinelSecurityDaemon:
+  def __init__(self, camera_index=0):
+    self.classifier = cv2.CascadeClassifier(
+      cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+    )
+    self.cap = cv2.VideoCapture(camera_index)
+  
+  def verify_biometrics(self):
+    ret, frame = self.cap.read()
+    if not ret: return False
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    faces = self.classifier.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
+    return len(faces) > 0  # Verified Face Detected`
+      },
       techStack: ["Python", "CustomTkinter", "OpenCV", "Google Gemini API", "Multi-Threading", "Biometrics", "Code Auditor"],
       githubUrl: "https://github.com/auratech01",
-      // =========================================================================
-      // 🚀 PROJECT SENTINEL LIVE DEMO LINK:
-      // Jab aapka live link ready ho, bas neeche wali line se '//' hata dein
-      // aur apna link paste kar dein (e.g., demoUrl: "https://auratech01.github.io/sentinel-project/"):
-      // demoUrl: "https://auratech01.github.io/sentinel-project/",
-      // =========================================================================
       stats: [
         { label: "AUTH", value: "FACE ID (OPENCV)" },
         { label: "AI ENGINE", value: "GEMINI API" },

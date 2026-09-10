@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   X, 
   ExternalLink, 
   FileText,
-  Download
+  Download,
+  Copy,
+  Check,
+  Printer
 } from 'lucide-react';
+import { soundManager } from './SoundEffects';
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -12,6 +16,8 @@ interface ResumeModalProps {
 }
 
 export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
+  const [copied, setCopied] = useState(false);
+
   if (!isOpen) return null;
 
   // Google Drive URLs for Malaika Fatima's official verified resume
@@ -19,9 +25,48 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
   const googleDriveDownloadUrl = "https://drive.google.com/uc?export=download&id=1OTSpW_HUMv2l2U7_Xmti82TB81uKkn3T";
 
   const handleDownloadPDF = () => {
-    // Opens the direct Google Drive download link in a new tab.
-    // This bypasses iframe sandbox restrictions and downloads the authentic 571KB PDF file directly.
+    soundManager.playClick();
     window.open(googleDriveDownloadUrl, '_blank');
+  };
+
+  const handlePrint = () => {
+    soundManager.playClick();
+    window.print();
+  };
+
+  const plainTextResume = `MALAIKA FATIMA
+Computer Science Student | AI & Game Development Enthusiast
+Phone: +92 322 6898750 | Email: auratech1101@gmail.com | Location: Pakistan
+GitHub: https://github.com/auratech01 | LinkedIn: https://linkedin.com/in/auratech01
+Portfolio: https://auratech01.github.io/malaika-fatima-portfolio/
+
+PROFESSIONAL SUMMARY
+Computer Science undergraduate with hands-on experience building multi-threaded Python applications and interactive HTML5 Canvas-based web games. Comfortable combining practical software development with modern AI tools such as the Google Gemini API and computer-vision libraries like OpenCV. Seeking an internship or entry-level role in software development, applied AI, or game development.
+
+EDUCATION
+Bachelor of Science in Computer Science (BSCS) | Virtual University of Pakistan
+Status: Currently in 7th Semester (2023 - Present) | CGPA: 3.72 / 4.00 (High Academic Merit)
+Core Coursework: Object-Oriented Programming (C++), Data Structures, Database Management Systems (SQL), Web Technologies
+
+TECHNICAL SKILLS
+- Programming Languages: Python, JavaScript (ES6+), C++, SQL, HTML5, CSS3
+- Web & Game Development: HTML5 Canvas (2D), Interactive Game Loops, 2D Physics & Collision Handling, Drag-and-Drop Mechanics, CSS 3D Transforms
+- Frameworks & Libraries: CustomTkinter, Tkinter, OpenCV, Google Gemini API, Multi-Threading (Python)
+- Developer Tools: VS Code, Git, GitHub Desktop, Cisco Packet Tracer, Linux (Ubuntu), Figma
+
+FEATURED PROJECTS
+1. Jade Lantern: Echoes of the Sun (Interactive Game)
+   - 2D Canvas platformer featuring drag-and-drop slingshot mechanics, collision engines & light particles.
+2. The Grand Birthday Experience (3D Interactive Web App)
+   - Dynamic 3D perspective gallery, cinematic music sequencing & personalized web architecture.
+3. Project Sentinel (Intelligent Python & AI Assistant)
+   - Desktop AI assistant with Gemini API integration, camera vision support, multi-threaded operations.`;
+
+  const handleCopyText = () => {
+    soundManager.playClick();
+    navigator.clipboard.writeText(plainTextResume);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -33,31 +78,56 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
         className="relative w-full max-w-4xl max-h-[92vh] flex flex-col bg-slate-950 border border-cyan-500/40 rounded-2xl shadow-2xl overflow-hidden box-glow-cyan my-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Top Control Bar - Clean, Minimalist, No Clutter */}
-        <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3.5 bg-slate-900/95 border-b border-cyan-500/30 shrink-0">
+        {/* Top Control Bar - Clean, Minimalist, Rich Actions */}
+        <div className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-3 bg-slate-900/95 border-b border-cyan-500/30 shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-lg bg-cyan-500/20 border border-cyan-400/40">
               <FileText className="w-5 h-5 text-cyan-400" />
             </div>
             <div>
-              <h3 className="font-orbitron font-bold text-sm sm:text-base text-white tracking-wide">
+              <h3 className="font-orbitron font-bold text-xs sm:text-base text-white tracking-wide">
                 MALAIKA FATIMA // RESUME
               </h3>
               <p className="text-[10px] sm:text-xs font-tech text-cyan-400/80">
-                OFFICIAL VERIFIED CURRICULUM VITAE
+                OFFICIAL VERIFIED CURRICULUM VITAE (CGPA 3.72)
               </p>
             </div>
           </div>
 
-          {/* Action Buttons: Only 2 essential actions + Close */}
-          <div className="flex items-center gap-2.5">
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Copy Text Button */}
+            <button
+              onClick={handleCopyText}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-tech transition-all cursor-pointer ${
+                copied
+                  ? 'bg-emerald-950 border-emerald-400 text-emerald-300'
+                  : 'bg-slate-900 border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-white'
+              }`}
+              title="Copy plain-text resume to clipboard"
+            >
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copied ? 'COPIED!' : 'COPY TEXT'}</span>
+            </button>
+
+            {/* Print / Save PDF Button */}
+            <button
+              onClick={handlePrint}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-cyan-400 text-slate-200 hover:text-white text-xs font-tech transition-all cursor-pointer"
+              title="Print or Save as PDF using browser print dialog"
+            >
+              <Printer className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="hidden sm:inline">PRINT / SAVE PDF</span>
+              <span className="sm:hidden">PRINT</span>
+            </button>
+
             {/* Direct Google Drive Download */}
             <button
               onClick={handleDownloadPDF}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs font-tech transition-all cursor-pointer box-glow-cyan shadow-md"
               title="Download the official PDF file directly from Google Drive"
             >
-              <Download className="w-4 h-4 text-slate-950" />
+              <Download className="w-3.5 h-3.5 text-slate-950" />
               <span>DOWNLOAD PDF</span>
             </button>
 
@@ -66,12 +136,11 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               href={googleDriveViewUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 hover:text-white text-xs font-tech transition-all cursor-pointer"
+              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 hover:text-white text-xs font-tech transition-all cursor-pointer"
               title="Open the official resume file on Google Drive in a new tab"
             >
               <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="hidden sm:inline">OPEN IN GOOGLE DRIVE</span>
-              <span className="sm:hidden">DRIVE</span>
+              <span>DRIVE</span>
             </a>
 
             {/* Close Button */}

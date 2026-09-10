@@ -9,6 +9,15 @@ export interface ProjectItem {
   demoUrl?: string;
   githubUrl?: string;
   stats?: { label: string; value: string }[];
+  overview?: string;
+  keyModules?: string[];
+  protocols?: string[];
+  milestones?: string[];
+  codeSnippet?: {
+    title: string;
+    language: string;
+    code: string;
+  };
 }
 
 export interface LabExperiment {

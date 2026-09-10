@@ -101,7 +101,7 @@ export default function App() {
         </nav>
 
         {/* Top Right System Status & Controls */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {/* Resume / CV Modal Trigger */}
           <button
             onClick={() => {
@@ -754,7 +754,7 @@ export default function App() {
             soundManager.playClick();
             setIsAssistantOpen(true);
           }}
-          className="relative group flex items-center gap-3 px-4 py-3 rounded-full bg-slate-950/95 border-2 border-cyan-400 text-white box-glow-cyan hover:scale-105 transition-all cursor-pointer"
+          className="relative group flex items-center gap-3 px-4 py-3 rounded-full bg-slate-950/95 border-2 border-cyan-400 text-white box-glow-cyan hover:scale-105 transition-all cursor-pointer shadow-2xl"
         >
           <div className="relative flex items-center justify-center w-8 h-8 rounded-full bg-cyan-500/30 border border-cyan-300 text-cyan-200">
             <Bot className="w-5 h-5 animate-pulse" />
