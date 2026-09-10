@@ -1,0 +1,47 @@
+MALAIKA FATIMA
+Computer Science Student | AI & Game Development Enthusiast
++92 322 6898750 | auratech1101@gmail.com | Pakistan | github.com/auratech01 | linkedin.com/in/auratech01
+
+PROFESSIONAL SUMMARY
+Computer Science undergraduate with hands-on experience building multi-threaded Python applications and interactive HTML5 Canvas-based web games. Comfortable combining practical software development with modern AI tools such as the Google Gemini API and computer-vision libraries like OpenCV. Seeking an internship or entry-level role in software development, applied AI, or game development to contribute, learn, and grow as a developer.
+
+EDUCATION
+Bachelor of Science in Computer Science (BSCS) | 2023 – Present
+Virtual University of Pakistan
+Currently in 7th Semester | CGPA: 3.72
+Core Coursework: Object-Oriented Programming (C++), Database Management Systems (SQL), Web Systems & Technologies
+
+TECHNICAL SKILLS
+- Programming Languages: Python, JavaScript (ES6+), C++, SQL, HTML5, CSS3
+- Web & Game Development: HTML5 Canvas (2D), Interactive Game Loops, 2D Physics & Collision Handling, Drag-and-Drop Mechanics, CSS 3D Transforms, DOM Manipulation
+- Frameworks & Libraries: CustomTkinter, Tkinter, OpenCV, Google Gemini API, Multi-Threading (Python)
+- Developer Tools: VS Code, Git, GitHub Desktop, Cisco Packet Tracer, Linux (Ubuntu), Figma
+
+FEATURED PROJECTS
+1. Project Sentinel — Desktop Security & Code-Auditing Application (Personal Project, In Development)
+   Tech: Python, CustomTkinter, OpenCV, Google Gemini API
+   - Building a multi-threaded Python desktop application combining biometric Face ID authentication (OpenCV) with real-time system and network monitoring (CPU, RAM, network activity).
+   - Developed an offline, pattern-based static code scanner for common vulnerability classes, with an optional Google Gemini API integration for deeper analysis and fix suggestions.
+   - Designed a real-time face-recognition workflow with a PIN-based fallback and automated email alerts for unrecognized-user detection.
+
+2. Jade Lantern — Interactive Restaurant Web Experience
+   Tech: HTML5, CSS3, Vanilla JavaScript
+   Live Site: https://auratech01.github.io/jade-lantern-restaurant/
+   - Designed a fine-dining restaurant website with animated page sections and a custom 3D flip-book style interactive menu built using CSS 3D transforms.
+   - Implemented a dynamic, JavaScript-driven menu system with fully responsive layouts and no external UI frameworks.
+
+3. Birthday Experience — Interactive 22-Level Web Game (Desktop Only)
+   Tech: HTML5 Canvas, JavaScript (ES6+), CSS3
+   Live Site: https://auratech01.github.io/birthday-experience/
+   - Built a 22-level interactive escape-room-style web game (engineered exclusively for desktop displays) using vanilla JavaScript state management for level progression and screen transitions.
+   - Implemented custom canvas-based mechanics, including physics-driven drag-and-drop mini-games and real-time particle animations (fireworks, confetti).
+   - Deployed as a lightweight, dependency-free game directly to GitHub Pages.
+
+INDEPENDENT PROJECT EXPERIENCE
+Self-Directed Software Developer — Personal & Academic Projects | 2024 – Present
+- Developed responsive web applications, canvas-based rendering systems, and Python desktop tools independently and as part of academic coursework.
+- Applied object-oriented programming principles in C++ and Python to build modular, maintainable code across multiple personal projects.
+
+CERTIFICATIONS
+- CCNA: Introduction to Networks — Cisco Networking Academy
+- CPA: Programming Essentials in C++ — Cisco Networking Academy
