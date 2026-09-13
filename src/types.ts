@@ -10,6 +10,13 @@ export interface ProjectItem {
   githubUrl?: string;
   stats?: { label: string; value: string }[];
   overview?: string;
+  problem?: string;
+  technicalChallenge?: string;
+  metrics?: {
+    lighthouse: string;
+    fps: string;
+    performanceTag: string;
+  };
   keyModules?: string[];
   protocols?: string[];
   milestones?: string[];

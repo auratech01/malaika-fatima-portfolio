@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
   Volume2, VolumeX, Terminal, Code2, Cpu, Sparkles, 
   Layers, ExternalLink, GraduationCap, Globe, Heart, 
   Compass, ArrowRight, Play, Eye, BookOpen, CheckCircle,
   Bot, Mail, Github, MessageSquare, Award, MessageCircle, Linkedin,
-  FileText
+  FileText, Menu, Briefcase, AlertTriangle, Lightbulb, Check, Search, Zap
 } from 'lucide-react';
 import { CyberBackgroundCanvas } from './components/CyberBackgroundCanvas';
 import { RobotDisplay } from './components/RobotDisplay';
 import { ProjectModal } from './components/ProjectModal';
 import { CyberAssistantModal } from './components/CyberAssistantModal';
 import { ResumeModal } from './components/ResumeModal';
+import { MobileNavDrawer } from './components/MobileNavDrawer';
+import { CommandPalette } from './components/CommandPalette';
 import { ContactSection } from './components/ContactSection';
 import { ToolsAndCertificationsSection } from './components/ToolsAndCertificationsSection';
 import { defaultPortfolioData } from './data';
@@ -26,6 +28,21 @@ export default function App() {
   const [activeLabCode, setActiveLabCode] = useState<string>('lab_canvas_particles');
   const [isAssistantOpen, setIsAssistantOpen] = useState(false);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [recruiterMode, setRecruiterMode] = useState(false);
+
+  // Global Ctrl+K / Cmd+K Command Palette Shortcut
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const toggleSound = () => {
     soundManager.enabled = !soundEnabled;
@@ -50,32 +67,45 @@ export default function App() {
   const currentLab = data.labExperiments.find(l => l.id === activeLabCode) || data.labExperiments[0];
 
   return (
-    <div className="relative min-h-screen bg-[#060a10] text-slate-100 font-rajdhani overflow-x-hidden selection:bg-cyan-500 selection:text-black">
-      {/* Background Cyber Canvas */}
-      <CyberBackgroundCanvas />
+    <div className={`relative min-h-screen font-rajdhani overflow-x-hidden selection:bg-cyan-500 selection:text-black transition-colors duration-500 ${
+      recruiterMode ? 'bg-[#0a0f18] text-slate-100' : 'bg-[#060a10] text-slate-100'
+    }`}>
+      {/* Background Cyber Canvas - Passes recruiterMode for calmer visual state */}
+      <CyberBackgroundCanvas recruiterMode={recruiterMode} />
 
-      {/* CRT Scanline overlay effect */}
-      <div className="fixed inset-0 scanline-overlay z-10 pointer-events-none opacity-30" />
+      {/* CRT Scanline overlay effect - disabled in recruiter mode for maximum clarity */}
+      {!recruiterMode && (
+        <div className="fixed inset-0 scanline-overlay z-10 pointer-events-none opacity-25" />
+      )}
 
       {/* Top Header & Navigation Bar */}
-      <header className="sticky top-0 z-40 bg-[#060a10]/90 backdrop-blur-md border-b border-cyan-500/30 px-4 sm:px-8 py-3 flex items-center justify-between">
+      <header className={`sticky top-0 z-40 backdrop-blur-md border-b px-3 sm:px-6 md:px-8 py-2.5 sm:py-3 flex items-center justify-between transition-colors ${
+        recruiterMode 
+          ? 'bg-slate-900/95 border-slate-700/80' 
+          : 'bg-[#060a10]/90 border-cyan-500/30'
+      }`}>
         
         {/* Brand / Logo */}
         <a 
           href="#home" 
           onClick={(e) => { e.preventDefault(); handleNavClick('#home', 'ABOUT'); }}
-          className="flex items-center gap-2 group cursor-pointer"
+          className="flex items-center gap-2 sm:gap-2.5 group cursor-pointer shrink-0 min-w-0"
         >
-          <div className="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-400/60 flex items-center justify-center box-glow-cyan">
-            <span className="font-orbitron font-bold text-cyan-300 text-sm">MF</span>
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-cyan-950/80 border border-cyan-400/60 flex items-center justify-center box-glow-cyan shadow-[0_0_10px_rgba(6,182,212,0.3)] shrink-0">
+            <span className="font-orbitron font-bold text-cyan-300 text-xs sm:text-sm">MF</span>
           </div>
-          <span className="font-orbitron font-bold text-sm tracking-wider text-white hidden md:inline group-hover:text-cyan-300 transition-colors">
-            MALAIKA FATIMA
-          </span>
+          <div className="flex flex-col min-w-0">
+            <span className="font-orbitron font-bold text-xs sm:text-sm tracking-wider text-white group-hover:text-cyan-300 transition-colors whitespace-nowrap">
+              MALAIKA FATIMA
+            </span>
+            <span className="font-tech text-[9px] sm:text-[10px] text-cyan-400/80 hidden md:block whitespace-nowrap">
+              FULL STACK & APPLIED AI
+            </span>
+          </div>
         </a>
 
-        {/* Navigation Links */}
-        <nav className="flex items-center gap-2 sm:gap-4 font-tech text-xs sm:text-sm tracking-widest overflow-x-auto py-1 scrollbar-none">
+        {/* Desktop Navigation Links (Hidden on Mobile & Tablet to eliminate horizontal scrolling!) */}
+        <nav className="hidden xl:flex items-center gap-2.5 2xl:gap-3.5 font-tech text-xs 2xl:text-sm tracking-wider py-1">
           {data.navigation.map((item, idx) => (
             <React.Fragment key={item.label}>
               <a
@@ -100,43 +130,109 @@ export default function App() {
           ))}
         </nav>
 
-        {/* Top Right System Status & Controls */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Resume / CV Modal Trigger */}
+        {/* Top Right Controls */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          
+          {/* Formula 3: Corporate / Recruiter View Toggle (Desktop/Tablet) */}
+          <button
+            onClick={() => {
+              soundManager.playClick();
+              setRecruiterMode(!recruiterMode);
+            }}
+            className={`hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-tech transition-all cursor-pointer shrink-0 ${
+              recruiterMode 
+                ? 'bg-blue-600 border-blue-400 text-white font-bold shadow-md' 
+                : 'bg-slate-900 border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-cyan-200'
+            }`}
+            title="Toggle Formal Corporate / Recruiter Executive Mode"
+          >
+            <Briefcase className="w-3.5 h-3.5" />
+            <span>{recruiterMode ? '👔 RECRUITER VIEW' : '👔 RECRUITER VIEW'}</span>
+          </button>
+
+          {/* Command Palette Quick Launcher (Ctrl+K) (Visible on Tablet & Desktop) */}
+          <button
+            onClick={() => {
+              soundManager.playClick();
+              setIsCommandPaletteOpen(true);
+            }}
+            className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-cyan-200 text-xs font-tech transition-all cursor-pointer shrink-0"
+            title="Open Command Palette & Quick Search (Ctrl + K / ⌘K)"
+          >
+            <Search className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="text-slate-300">Quick</span>
+            <kbd className="inline-block px-1.5 py-0.2 rounded bg-slate-950 border border-slate-800 text-[10px] text-cyan-400 font-mono">
+              ⌘K
+            </kbd>
+          </button>
+
+          {/* Formula 1: Instant 1-Click "Download / Print Official Resume" (PDF) Button */}
           <button
             onClick={() => {
               soundManager.playClick();
               setIsResumeOpen(true);
             }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-cyan-950/80 border border-cyan-400/50 hover:border-cyan-300 text-cyan-300 hover:text-white text-xs font-tech transition-all box-glow-cyan cursor-pointer"
-            title="View & Download Official Resume / CV"
+            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-cyan-950/90 border border-cyan-400/70 hover:border-cyan-300 text-cyan-200 hover:text-white text-[11px] sm:text-xs font-orbitron font-semibold tracking-wider transition-all box-glow-cyan cursor-pointer shadow-[0_0_12px_rgba(6,182,212,0.25)] shrink-0"
+            title="Instant 1-Click View, Download & Print Official Resume (PDF)"
           >
-            <FileText className="w-3.5 h-3.5 text-cyan-400" />
-            <span>RESUME</span>
+            <FileText className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+            <span>RESUME <span className="hidden sm:inline">(PDF)</span></span>
           </button>
 
-          {/* AI Guide Quick Header Button */}
+          {/* AI Guide Quick Header Button (Desktop only) */}
           <button
             onClick={() => {
               soundManager.playClick();
               setIsAssistantOpen(true);
             }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-white text-xs font-tech transition-all cursor-pointer"
+            className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-white text-xs font-tech transition-all cursor-pointer shrink-0"
           >
             <Bot className="w-3.5 h-3.5 animate-pulse text-cyan-400" />
-            <span className="hidden sm:inline">ASK AURA</span>
+            <span>ASK AURA</span>
           </button>
 
+          {/* Audio toggle */}
           <button
             onClick={toggleSound}
             onMouseEnter={() => soundManager.playHover()}
-            className="p-1.5 rounded-lg bg-slate-900 border border-cyan-500/30 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-500/10 transition-all box-glow-cyan"
-            title={soundEnabled ? "Mute Cyber Audio" : "Enable Cyber Audio"}
+            className="p-1.5 rounded-lg bg-slate-900 border border-cyan-500/30 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-500/10 transition-all box-glow-cyan shrink-0"
+            title={soundEnabled ? "Mute Audio" : "Enable Audio"}
           >
             {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
           </button>
+
+          {/* Mobile & Tablet Hamburger Menu Button (Matches Saad's portfolio modal style!) */}
+          <button
+            onClick={() => {
+              soundManager.playClick();
+              setIsMobileNavOpen(true);
+            }}
+            className="xl:hidden p-1.5 rounded-lg bg-cyan-950/90 border border-cyan-400/60 text-cyan-300 hover:text-white hover:border-cyan-300 transition-all cursor-pointer box-glow-cyan shrink-0"
+            aria-label="Open navigation menu"
+            title="Open Menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
         </div>
       </header>
+
+      {/* Recruiter Mode Active Banner */}
+      {recruiterMode && (
+        <div className="relative z-30 bg-blue-950/80 border-b border-blue-500/30 px-4 py-2 flex items-center justify-between text-xs font-tech text-blue-200">
+          <div className="flex items-center gap-2 max-w-2xl">
+            <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+            <span>
+              <strong>EXECUTIVE / RECRUITER MODE ACTIVE:</strong> High-readability corporate contrast, streamlined animations, and ATS-focused engineering presentation.
+            </span>
+          </div>
+          <button
+            onClick={() => setRecruiterMode(false)}
+            className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-blue-400/50 text-blue-300 hover:text-white text-[11px] font-bold"
+          >
+            SWITCH TO CYBER MODE
+          </button>
+        </div>
+      )}
 
       {/* Main Container */}
       <main className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-20 space-y-28">
@@ -173,7 +269,7 @@ export default function App() {
           </motion.div>
 
           {/* Floating Robot Centerpiece */}
-          <RobotDisplay mediaConfig={data.robotMedia} />
+          <RobotDisplay mediaConfig={data.robotMedia} recruiterMode={recruiterMode} />
 
           {/* Quick Action Interactive Buttons */}
           <motion.div
@@ -209,10 +305,10 @@ export default function App() {
                 soundManager.playClick();
                 setIsResumeOpen(true);
               }}
-              className="px-5 py-2.5 rounded-xl bg-cyan-950/90 hover:bg-cyan-900 border border-cyan-400/70 text-cyan-300 font-orbitron font-bold text-xs sm:text-sm tracking-wider transition-all box-glow-cyan cursor-pointer flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl bg-cyan-950/90 hover:bg-cyan-900 border border-cyan-400/70 text-cyan-300 font-orbitron font-bold text-xs sm:text-sm tracking-wider transition-all box-glow-cyan cursor-pointer flex items-center gap-2 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
             >
               <FileText className="w-4 h-4 text-cyan-400" />
-              <span>VIEW RESUME</span>
+              <span>VIEW / PRINT RESUME (PDF)</span>
             </button>
 
             <button
@@ -469,7 +565,7 @@ export default function App() {
             </span>
           </div>
 
-          {/* Projects Grid */}
+          {/* Projects Grid - Formula 2 & 4 Implementation */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {data.projects.map((project) => (
               <div
@@ -485,7 +581,7 @@ export default function App() {
                     <img
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-full object-cover filter contrast-110 group-hover:scale-108 transition-transform duration-500"
+                      className="w-full h-full object-cover filter contrast-110 group-hover:scale-105 transition-transform duration-500"
                       referrerPolicy="no-referrer"
                       onError={(e) => {
                         const fallbackMap: Record<string, string> = {
@@ -508,12 +604,12 @@ export default function App() {
                     {/* Quick Inspect Hover Overlay */}
                     <div className="absolute inset-0 bg-cyan-950/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-cyan-300 font-tech text-xs font-bold tracking-widest">
                       <Eye className="w-4 h-4" />
-                      <span>INSPECT PROJECT SPEC</span>
+                      <span>INSPECT ARCHITECTURE SPEC</span>
                     </div>
                   </div>
 
-                  {/* Project Info */}
-                  <div className="p-5 space-y-3">
+                  {/* Project Info - Structured Formula */}
+                  <div className="p-5 space-y-3.5">
                     <div>
                       <h3 className="font-orbitron text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
                         {project.title}
@@ -525,12 +621,51 @@ export default function App() {
                       )}
                     </div>
 
-                    <p className="font-rajdhani text-sm text-slate-300 line-clamp-3 leading-relaxed">
-                      {project.description}
-                    </p>
+                    {/* Problem ➔ Solution Structure */}
+                    <div className="space-y-2 text-xs">
+                      {project.problem && (
+                        <div className="p-2.5 rounded-lg bg-amber-950/30 border border-amber-500/30">
+                          <div className="flex items-center gap-1.5 font-tech font-bold text-[10px] text-amber-400 uppercase tracking-wider mb-0.5">
+                            <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
+                            <span>The Problem:</span>
+                          </div>
+                          <p className="text-slate-300 text-xs line-clamp-2 leading-relaxed font-rajdhani">
+                            {project.problem}
+                          </p>
+                        </div>
+                      )}
+
+                      {project.technicalChallenge && (
+                        <div className="p-2.5 rounded-lg bg-cyan-950/40 border border-cyan-500/30">
+                          <div className="flex items-center gap-1.5 font-tech font-bold text-[10px] text-cyan-300 uppercase tracking-wider mb-0.5">
+                            <Lightbulb className="w-3 h-3 text-cyan-400 shrink-0" />
+                            <span>Technical Solution:</span>
+                          </div>
+                          <p className="text-slate-300 text-xs line-clamp-2 leading-relaxed font-rajdhani">
+                            {project.technicalChallenge}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Engineering Performance Proof Badges */}
+                    {project.metrics && (
+                      <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                        <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-950/70 border border-emerald-500/40 text-[10px] font-tech font-bold text-emerald-300">
+                          <Zap className="w-3 h-3 text-emerald-400" />
+                          <span>{project.metrics.lighthouse}</span>
+                        </div>
+                        <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-cyan-950/70 border border-cyan-500/40 text-[10px] font-tech text-cyan-300">
+                          <span>⚡ {project.metrics.fps}</span>
+                        </div>
+                        <div className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700/80 text-[10px] font-tech text-slate-300">
+                          {project.metrics.performanceTag}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Tech Stack Chips */}
-                    <div className="flex flex-wrap gap-1.5 pt-2">
+                    <div className="flex flex-wrap gap-1.5 pt-1">
                       {project.techStack.slice(0, 4).map((tech) => (
                         <span
                           key={tech}
@@ -548,36 +683,42 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Bottom Action Footer */}
+                {/* Bottom Action Footer - Formula 4: GitHub Source Code + Live Demo Buttons */}
                 <div className="p-5 pt-0 flex items-center gap-2">
-                  <button
-                    onClick={() => handleProjectClick(project)}
-                    className="flex-1 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/50 hover:border-cyan-300 text-cyan-300 text-xs font-tech tracking-wider transition-all flex items-center justify-center gap-1.5"
-                  >
-                    <span>SPEC & STATS</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-
-                  {project.demoUrl ? (
+                  {project.demoUrl && (
                     <a
                       href={project.demoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-400 text-cyan-300 transition-all flex items-center gap-1.5"
-                      title="Open Live Experience"
+                      className="flex-1 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-orbitron font-bold text-xs tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-[0_0_12px_rgba(6,182,212,0.3)]"
+                      title="Open Live Deployment"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
-                      <span className="text-[10px] font-tech font-bold tracking-wider">LIVE</span>
+                      <span>LIVE DEMO</span>
                     </a>
-                  ) : (
-                    <div 
-                      className="px-2.5 py-2 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-cyan-400/90 text-[10px] font-tech flex items-center gap-1.5 shrink-0"
-                      title="Live deployment in progress"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                      <span className="tracking-wider">COMING SOON</span>
-                    </div>
                   )}
+
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-cyan-400 text-cyan-300 transition-all flex items-center gap-1.5"
+                      title="View GitHub Repository Source Code"
+                    >
+                      <Github className="w-3.5 h-3.5" />
+                      <span className="text-xs font-tech font-bold tracking-wider">CODE</span>
+                    </a>
+                  )}
+
+                  <button
+                    onClick={() => handleProjectClick(project)}
+                    className="px-3 py-2 rounded-xl bg-cyan-950/70 hover:bg-cyan-900 border border-cyan-500/40 hover:border-cyan-300 text-cyan-300 text-xs font-tech tracking-wider transition-all flex items-center justify-center gap-1"
+                    title="Inspect Full Project Architecture Spec"
+                  >
+                    <span>SPEC</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
                 </div>
 
                 {/* Corner Accents */}
@@ -830,6 +971,7 @@ export default function App() {
       <CyberAssistantModal
         isOpen={isAssistantOpen}
         onClose={() => setIsAssistantOpen(false)}
+        onOpenResume={() => setIsResumeOpen(true)}
         onSelectProject={(projectId) => {
           const p = data.projects.find(x => x.id === projectId);
           if (p) setSelectedProject(p);
@@ -840,6 +982,38 @@ export default function App() {
       <ResumeModal
         isOpen={isResumeOpen}
         onClose={() => setIsResumeOpen(false)}
+      />
+
+      {/* Mobile Navigation Drawer (Saad Portfolio Style - No horizontal scrolling) */}
+      <MobileNavDrawer
+        isOpen={isMobileNavOpen}
+        onClose={() => setIsMobileNavOpen(false)}
+        activeTab={activeTab}
+        onNavigate={handleNavClick}
+        onOpenResume={() => setIsResumeOpen(true)}
+        onOpenAssistant={() => setIsAssistantOpen(true)}
+        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+        soundEnabled={soundEnabled}
+        onToggleSound={toggleSound}
+        recruiterMode={recruiterMode}
+        onToggleRecruiterMode={() => setRecruiterMode(!recruiterMode)}
+      />
+
+      {/* Command Palette (Ctrl+K / ⌘K) */}
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onNavigate={handleNavClick}
+        onOpenResume={() => setIsResumeOpen(true)}
+        onOpenAssistant={() => setIsAssistantOpen(true)}
+        recruiterMode={recruiterMode}
+        onToggleRecruiterMode={() => setRecruiterMode(!recruiterMode)}
+        soundEnabled={soundEnabled}
+        onToggleSound={toggleSound}
+        onSelectProject={(projectId) => {
+          const p = data.projects.find(x => x.id === projectId);
+          if (p) setSelectedProject(p);
+        }}
       />
     </div>
   );

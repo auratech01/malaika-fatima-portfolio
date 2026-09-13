@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, ExternalLink, Cpu, Layers, CheckCircle2, Copy, Check, Terminal, Sparkles } from 'lucide-react';
+import { X, ExternalLink, Cpu, Layers, CheckCircle2, Copy, Check, Terminal, Sparkles, Github, AlertTriangle, Lightbulb } from 'lucide-react';
 import { ProjectItem } from '../types';
 import { soundManager } from './SoundEffects';
 
@@ -72,7 +72,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             {/* Top Row: Visual Screenshot & Quick Actions */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch">
               {/* Project Image Banner */}
-              <div className="md:col-span-8 relative rounded-xl overflow-hidden border border-cyan-500/30 group max-h-56 bg-slate-900">
+              <div className="md:col-span-7 relative rounded-xl overflow-hidden border border-cyan-500/30 group max-h-56 bg-slate-900">
                 <img
                   src={project.image}
                   alt={project.title}
@@ -92,20 +92,35 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-70" />
                 <div className="absolute bottom-3 left-3 flex items-center gap-2">
                   <span className="px-2.5 py-1 bg-cyan-950/90 border border-cyan-400/60 rounded text-[11px] font-tech text-cyan-200">
-                    STATUS: VERIFIED DEPLOYMENT
+                    STATUS: VERIFIED PRODUCTION DEPLOYMENT
                   </span>
                 </div>
               </div>
 
-              {/* Quick Launch & Stats Card */}
-              <div className="md:col-span-4 flex flex-col justify-between gap-3 p-4 rounded-xl bg-slate-900/70 border border-cyan-500/30">
+              {/* Quick Launch, Source Code & Metrics Card */}
+              <div className="md:col-span-5 flex flex-col justify-between gap-3 p-4 rounded-xl bg-slate-900/70 border border-cyan-500/30">
                 <div>
                   <div className="font-tech text-xs text-cyan-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>SYSTEM METRICS</span>
+                    <span>SYSTEM & PERFORMANCE METRICS</span>
                   </div>
+
+                  {/* Performance Proof Badges */}
+                  {project.metrics && (
+                    <div className="mb-2 grid grid-cols-2 gap-1.5">
+                      <div className="bg-emerald-950/60 border border-emerald-500/40 p-1.5 rounded flex items-center justify-between">
+                        <span className="font-tech text-[10px] text-emerald-300">LIGHTHOUSE</span>
+                        <span className="font-orbitron text-xs font-bold text-emerald-400">{project.metrics.lighthouse}</span>
+                      </div>
+                      <div className="bg-cyan-950/60 border border-cyan-500/40 p-1.5 rounded flex items-center justify-between">
+                        <span className="font-tech text-[10px] text-cyan-300">FRAME RATE</span>
+                        <span className="font-orbitron text-xs font-bold text-cyan-400">{project.metrics.fps}</span>
+                      </div>
+                    </div>
+                  )}
+
                   {project.stats && (
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       {project.stats.map((stat, idx) => (
                         <div key={idx} className="flex justify-between items-center bg-slate-950/60 px-3 py-1.5 rounded border border-slate-800">
                           <span className="font-tech text-[10px] text-slate-400">{stat.label}</span>
@@ -116,26 +131,61 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                   )}
                 </div>
 
-                <div className="pt-2">
-                  {project.demoUrl ? (
+                {/* Primary Action Buttons: Live Demo + Source Code */}
+                <div className="pt-2 space-y-2">
+                  {project.demoUrl && (
                     <a
                       href={project.demoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       onMouseEnter={() => soundManager.playHover()}
                       onClick={() => soundManager.playClick()}
-                      className="w-full py-2.5 px-3 rounded-lg font-tech text-xs tracking-wider bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold transition-all flex items-center justify-center gap-2 box-glow-cyan"
+                      className="w-full py-2.5 px-3 rounded-xl font-tech text-xs tracking-wider bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold transition-all flex items-center justify-center gap-2 box-glow-cyan"
                     >
                       <ExternalLink className="w-4 h-4" />
                       <span>LAUNCH LIVE DEMO</span>
                     </a>
-                  ) : (
-                    <div className="w-full py-2.5 px-3 rounded-lg font-tech text-[11px] text-center text-cyan-300 bg-slate-950/80 border border-cyan-500/40 flex items-center justify-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                      <span>LOCAL AUDIT // STANDALONE</span>
-                    </div>
+                  )}
+
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onMouseEnter={() => soundManager.playHover()}
+                      onClick={() => soundManager.playClick()}
+                      className="w-full py-2.5 px-3 rounded-xl font-tech text-xs tracking-wider bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-cyan-400 text-cyan-200 hover:text-white transition-all flex items-center justify-center gap-2"
+                    >
+                      <Github className="w-4 h-4 text-cyan-400" />
+                      <span>VIEW SOURCE CODE (GITHUB)</span>
+                    </a>
                   )}
                 </div>
+              </div>
+            </div>
+
+            {/* Formula 2: The Problem ➔ Technical Challenge & Solution Structure */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Problem Card */}
+              <div className="p-4 rounded-xl bg-slate-900/60 border border-amber-500/30 space-y-2">
+                <div className="font-tech text-xs text-amber-400 tracking-wider uppercase flex items-center gap-1.5 border-b border-slate-800 pb-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-400" />
+                  <span>THE PROBLEM / OBJECTIVE</span>
+                </div>
+                <p className="font-rajdhani text-sm text-slate-300 leading-relaxed">
+                  {project.problem || "Bridging the gap between static user interfaces and high-performance interactive visual systems."}
+                </p>
+              </div>
+
+              {/* Technical Challenge & Solution Card */}
+              <div className="p-4 rounded-xl bg-slate-900/60 border border-cyan-500/30 space-y-2">
+                <div className="font-tech text-xs text-cyan-300 tracking-wider uppercase flex items-center gap-1.5 border-b border-slate-800 pb-2">
+                  <Lightbulb className="w-4 h-4 text-cyan-400" />
+                  <span>TECHNICAL CHALLENGE & SOLUTION</span>
+                </div>
+                <p className="font-rajdhani text-sm text-slate-300 leading-relaxed">
+                  {project.technicalChallenge || project.overview || project.description}
+                </p>
               </div>
             </div>
 
@@ -258,7 +308,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
           <div className="border-t border-cyan-500/20 px-6 py-3 bg-slate-950 flex flex-wrap items-center justify-between text-xs font-tech text-slate-400 shrink-0">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-              <span>MALAIKA NOOR // PORTFOLIO SPECIFICATION PROTOCOL</span>
+              <span>MALAIKA FATIMA // PORTFOLIO SPECIFICATION PROTOCOL</span>
             </div>
             <div className="text-cyan-400/80">
               PRESS ESC OR CLOSE TO RETURN
