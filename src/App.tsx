@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { 
   Volume2, VolumeX, Terminal, Code2, Cpu, Sparkles, 
   Layers, ExternalLink, GraduationCap, Globe, Heart, 
   Compass, ArrowRight, Play, Eye, BookOpen, CheckCircle,
   Bot, Mail, Github, MessageSquare, Award, MessageCircle, Linkedin,
-  FileText, Menu, Briefcase, AlertTriangle, Lightbulb, Check, Search, Zap
+  FileText, Menu, Briefcase, AlertTriangle, Lightbulb, Check, Zap
 } from 'lucide-react';
 import { CyberBackgroundCanvas } from './components/CyberBackgroundCanvas';
 import { RobotDisplay } from './components/RobotDisplay';
@@ -13,7 +13,6 @@ import { ProjectModal } from './components/ProjectModal';
 import { CyberAssistantModal } from './components/CyberAssistantModal';
 import { ResumeModal } from './components/ResumeModal';
 import { MobileNavDrawer } from './components/MobileNavDrawer';
-import { CommandPalette } from './components/CommandPalette';
 import { ContactSection } from './components/ContactSection';
 import { ToolsAndCertificationsSection } from './components/ToolsAndCertificationsSection';
 import { defaultPortfolioData } from './data';
@@ -29,20 +28,7 @@ export default function App() {
   const [isAssistantOpen, setIsAssistantOpen] = useState(false);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [recruiterMode, setRecruiterMode] = useState(false);
-
-  // Global Ctrl+K / Cmd+K Command Palette Shortcut
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        setIsCommandPaletteOpen((prev) => !prev);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
 
   const toggleSound = () => {
     soundManager.enabled = !soundEnabled;
@@ -79,7 +65,7 @@ export default function App() {
       )}
 
       {/* Top Header & Navigation Bar */}
-      <header className={`sticky top-0 z-40 backdrop-blur-md border-b px-3 sm:px-6 md:px-8 py-2.5 sm:py-3 flex items-center justify-between transition-colors ${
+      <header className={`sticky top-0 z-40 backdrop-blur-md border-b px-2.5 sm:px-6 md:px-8 py-2 sm:py-2.5 flex items-center justify-between transition-colors ${
         recruiterMode 
           ? 'bg-slate-900/95 border-slate-700/80' 
           : 'bg-[#060a10]/90 border-cyan-500/30'
@@ -89,14 +75,14 @@ export default function App() {
         <a 
           href="#home" 
           onClick={(e) => { e.preventDefault(); handleNavClick('#home', 'ABOUT'); }}
-          className="flex items-center gap-2 sm:gap-2.5 group cursor-pointer shrink-0 min-w-0"
+          className="flex items-center gap-1.5 sm:gap-2.5 group cursor-pointer shrink min-w-0"
         >
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-cyan-950/80 border border-cyan-400/60 flex items-center justify-center box-glow-cyan shadow-[0_0_10px_rgba(6,182,212,0.3)] shrink-0">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-cyan-950/80 border border-cyan-400/60 flex items-center justify-center box-glow-cyan shadow-[0_0_8px_rgba(6,182,212,0.3)] shrink-0">
             <span className="font-orbitron font-bold text-cyan-300 text-xs sm:text-sm">MF</span>
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="font-orbitron font-bold text-xs sm:text-sm tracking-wider text-white group-hover:text-cyan-300 transition-colors whitespace-nowrap">
-              MALAIKA FATIMA
+            <span className="font-orbitron font-bold text-xs sm:text-sm tracking-wider text-white group-hover:text-cyan-300 transition-colors truncate">
+              MALAIKA <span className="hidden min-[380px]:inline">FATIMA</span>
             </span>
             <span className="font-tech text-[9px] sm:text-[10px] text-cyan-400/80 hidden md:block whitespace-nowrap">
               FULL STACK & APPLIED AI
@@ -130,40 +116,29 @@ export default function App() {
           ))}
         </nav>
 
-        {/* Top Right Controls */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        {/* Top Right Controls - Balanced & Proportional on All Devices */}
+        <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 shrink-0">
           
-          {/* Formula 3: Corporate / Recruiter View Toggle (Desktop/Tablet) */}
+          {/* Formula 3: Corporate / Recruiter View Toggle (Visible OUTSIDE on Mobile, Tablet & Desktop) */}
           <button
             onClick={() => {
               soundManager.playClick();
               setRecruiterMode(!recruiterMode);
             }}
-            className={`hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-tech transition-all cursor-pointer shrink-0 ${
+            className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 md:px-3 py-1.5 rounded-lg border text-[11px] sm:text-xs font-tech transition-all cursor-pointer shrink-0 ${
               recruiterMode 
                 ? 'bg-blue-600 border-blue-400 text-white font-bold shadow-md' 
-                : 'bg-slate-900 border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-cyan-200'
+                : 'bg-slate-900/95 border-slate-700 hover:border-blue-400 text-slate-300 hover:text-blue-200'
             }`}
             title="Toggle Formal Corporate / Recruiter Executive Mode"
           >
-            <Briefcase className="w-3.5 h-3.5" />
-            <span>{recruiterMode ? '👔 RECRUITER VIEW' : '👔 RECRUITER VIEW'}</span>
-          </button>
-
-          {/* Command Palette Quick Launcher (Ctrl+K) (Visible on Tablet & Desktop) */}
-          <button
-            onClick={() => {
-              soundManager.playClick();
-              setIsCommandPaletteOpen(true);
-            }}
-            className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-cyan-200 text-xs font-tech transition-all cursor-pointer shrink-0"
-            title="Open Command Palette & Quick Search (Ctrl + K / ⌘K)"
-          >
-            <Search className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="text-slate-300">Quick</span>
-            <kbd className="inline-block px-1.5 py-0.2 rounded bg-slate-950 border border-slate-800 text-[10px] text-cyan-400 font-mono">
-              ⌘K
-            </kbd>
+            <Briefcase className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-400 shrink-0" />
+            <span className="font-semibold tracking-wide">
+              <span className="hidden sm:inline">👔 </span>
+              <span className="hidden min-[400px]:inline">RECRUITER</span>
+              <span className="min-[400px]:hidden">REC</span>
+              <span className="hidden md:inline"> VIEW</span>
+            </span>
           </button>
 
           {/* Formula 1: Instant 1-Click "Download / Print Official Resume" (PDF) Button */}
@@ -172,46 +147,34 @@ export default function App() {
               soundManager.playClick();
               setIsResumeOpen(true);
             }}
-            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-cyan-950/90 border border-cyan-400/70 hover:border-cyan-300 text-cyan-200 hover:text-white text-[11px] sm:text-xs font-orbitron font-semibold tracking-wider transition-all box-glow-cyan cursor-pointer shadow-[0_0_12px_rgba(6,182,212,0.25)] shrink-0"
+            className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 md:px-3 py-1.5 rounded-lg bg-cyan-950/90 border border-cyan-400/70 hover:border-cyan-300 text-cyan-200 hover:text-white text-[10px] sm:text-xs font-orbitron font-semibold tracking-wider transition-all box-glow-cyan cursor-pointer shadow-[0_0_10px_rgba(6,182,212,0.25)] shrink-0"
             title="Instant 1-Click View, Download & Print Official Resume (PDF)"
           >
-            <FileText className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-            <span>RESUME <span className="hidden sm:inline">(PDF)</span></span>
+            <FileText className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-cyan-400 shrink-0" />
+            <span>RESUME <span className="hidden md:inline">(PDF)</span></span>
           </button>
 
-          {/* AI Guide Quick Header Button (Desktop only) */}
-          <button
-            onClick={() => {
-              soundManager.playClick();
-              setIsAssistantOpen(true);
-            }}
-            className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-white text-xs font-tech transition-all cursor-pointer shrink-0"
-          >
-            <Bot className="w-3.5 h-3.5 animate-pulse text-cyan-400" />
-            <span>ASK AURA</span>
-          </button>
-
-          {/* Audio toggle */}
+          {/* Audio toggle (Visible on Tablet & Desktop; Mobile users have it inside 3-lines menu) */}
           <button
             onClick={toggleSound}
             onMouseEnter={() => soundManager.playHover()}
-            className="p-1.5 rounded-lg bg-slate-900 border border-cyan-500/30 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-500/10 transition-all box-glow-cyan shrink-0"
+            className="hidden sm:flex p-1.5 rounded-lg bg-slate-900 border border-cyan-500/30 text-cyan-400 hover:border-cyan-400 hover:bg-cyan-500/10 transition-all box-glow-cyan shrink-0"
             title={soundEnabled ? "Mute Audio" : "Enable Audio"}
           >
-            {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500" />}
           </button>
 
-          {/* Mobile & Tablet Hamburger Menu Button (Matches Saad's portfolio modal style!) */}
+          {/* Mobile & Tablet Hamburger Menu Button (3 Lines - 100% Guaranteed Visible on All Phones) */}
           <button
             onClick={() => {
               soundManager.playClick();
               setIsMobileNavOpen(true);
             }}
-            className="xl:hidden p-1.5 rounded-lg bg-cyan-950/90 border border-cyan-400/60 text-cyan-300 hover:text-white hover:border-cyan-300 transition-all cursor-pointer box-glow-cyan shrink-0"
+            className="xl:hidden p-1.5 rounded-lg bg-cyan-950/90 border border-cyan-400/80 text-cyan-300 hover:text-white hover:border-cyan-300 hover:bg-cyan-900/60 transition-all cursor-pointer box-glow-cyan shrink-0 shadow-[0_0_10px_rgba(6,182,212,0.3)]"
             aria-label="Open navigation menu"
             title="Open Menu"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </header>
@@ -992,28 +955,10 @@ export default function App() {
         onNavigate={handleNavClick}
         onOpenResume={() => setIsResumeOpen(true)}
         onOpenAssistant={() => setIsAssistantOpen(true)}
-        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
         soundEnabled={soundEnabled}
         onToggleSound={toggleSound}
         recruiterMode={recruiterMode}
         onToggleRecruiterMode={() => setRecruiterMode(!recruiterMode)}
-      />
-
-      {/* Command Palette (Ctrl+K / ⌘K) */}
-      <CommandPalette
-        isOpen={isCommandPaletteOpen}
-        onClose={() => setIsCommandPaletteOpen(false)}
-        onNavigate={handleNavClick}
-        onOpenResume={() => setIsResumeOpen(true)}
-        onOpenAssistant={() => setIsAssistantOpen(true)}
-        recruiterMode={recruiterMode}
-        onToggleRecruiterMode={() => setRecruiterMode(!recruiterMode)}
-        soundEnabled={soundEnabled}
-        onToggleSound={toggleSound}
-        onSelectProject={(projectId) => {
-          const p = data.projects.find(x => x.id === projectId);
-          if (p) setSelectedProject(p);
-        }}
       />
     </div>
   );

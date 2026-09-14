@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, FileText, Send, Bot, Sparkles, Briefcase, Volume2, VolumeX, ShieldCheck, Search } from 'lucide-react';
+import { X, FileText, Send, Bot, Sparkles, Briefcase, Volume2, VolumeX, ShieldCheck } from 'lucide-react';
 import { soundManager } from './SoundEffects';
 
 interface MobileNavDrawerProps {
@@ -9,7 +9,6 @@ interface MobileNavDrawerProps {
   onNavigate: (href: string, label: string) => void;
   onOpenResume: () => void;
   onOpenAssistant: () => void;
-  onOpenCommandPalette?: () => void;
   recruiterMode: boolean;
   onToggleRecruiterMode: () => void;
   soundEnabled: boolean;
@@ -23,7 +22,6 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
   onNavigate,
   onOpenResume,
   onOpenAssistant,
-  onOpenCommandPalette,
   recruiterMode,
   onToggleRecruiterMode,
   soundEnabled,
@@ -171,32 +169,18 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                   <span>GET IN TOUCH / CONTACT</span>
                 </button>
 
-                {/* 3. Command Palette & Ask Aura AI Buttons */}
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => {
-                      soundManager.playClick();
-                      onClose();
-                      if (onOpenCommandPalette) onOpenCommandPalette();
-                    }}
-                    className="py-2 px-3 rounded-xl bg-slate-900/90 border border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-cyan-300 font-tech text-xs tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    <Search className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>COMMAND (⌘K)</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      soundManager.playClick();
-                      onClose();
-                      onOpenAssistant();
-                    }}
-                    className="py-2 px-3 rounded-xl bg-slate-900/90 border border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-white font-tech text-xs tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    <Bot className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-                    <span>ASK AURA AI</span>
-                  </button>
-                </div>
+                {/* 3. Ask Aura AI Guide Button */}
+                <button
+                  onClick={() => {
+                    soundManager.playClick();
+                    onClose();
+                    onOpenAssistant();
+                  }}
+                  className="w-full py-2.5 px-4 rounded-xl bg-slate-900/90 border border-slate-700 hover:border-cyan-400 text-slate-200 hover:text-white font-tech text-xs tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                >
+                  <Bot className="w-4 h-4 text-cyan-400 animate-pulse" />
+                  <span>ASK AURA AI GUIDE & CHAT</span>
+                </button>
               </div>
 
               {/* Bio Summary at Bottom (Just like Saad's) */}
